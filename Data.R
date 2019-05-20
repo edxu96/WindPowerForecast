@@ -1,0 +1,31 @@
+# DTU31761A3: Wind Power Output Prediction using Regression
+# Get Data for Training, Prediction and Validation
+# author: Edward J. Xu
+# date: May 20th, 2019
+########################################################################################################################
+source("FuncData.R")
+########################################################################################################################
+## 1,  Data for Training
+datfTrain <- frameDataTrain("Data/TrainData3.csv")
+numTrain <- length(datfTrain$series)
+datfTrain["speed.norm"] <- calNorminalSpeed(0.99, datfTrain) / 30
+datfTrain["speed.center"] <- datfTrain$speed.norm
+# datfTrain["speed.2"] <- datfTrain$speed.norm^2
+# datfTrain["speed.3"] <- datfTrain$speed.norm^3
+########################################################################################################################
+## 2,  Data for Validation
+datfVali <- tail(frameDataTrain("Data/TrainData4.csv"), 24 * 28)
+numVali <- length(datfVali$series)
+datfVali["speed.norm"] <- calNorminalSpeed(0.99, datfVali) / 30
+datfVali["speed.center"] <- datfVali$speed.norm
+########################################################################################################################
+## 3,  Data for Prediction
+datfPred <- frameDataPred("Data/WeatherForecastInput3.csv")
+numPred <- length(datfPred$series)
+datfPred["speed.norm"] <- calNorminalSpeed(0.99, datfPred) / 30
+datfPred["speed.center"] <- datfPred$speed.norm
+# datfPred["speed.2"] <- datfPred$speed.norm^2
+# datfPred["speed.3"] <- datfPred$speed.norm^3
+########################################################################################################################
+cat("Whether lengths of prediction and validation date are the same?", (numVali == numPred), "\n")
+rm(frameDataTrain, frameDataPred, calNorminalSpeed)
