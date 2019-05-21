@@ -2,7 +2,6 @@
 # Calculate vecKernal and matWeight for Local Regression
 # author: Edward J. Xu
 # date: May 20th, 2019
-# setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 ## 1.1,  Kernal of local regression
 vecKernal <- rep(NA, 25)
 vecKernal[1:21] <- seq(0, 0.7, by = 0.7 / 20)

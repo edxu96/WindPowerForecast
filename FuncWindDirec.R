@@ -3,10 +3,11 @@
 # author: Edward J. Xu
 # date: May 20th, 2019
 ########################################################################################################################
-updateWindSpeedCenter <- function(vecPar, dat){
+updateWindSpeedCenter <- function(vecPar, dat, strDatName){
     for (i in 1:360) {
         dat$speed.center[dat$degree100 == i] <- dat$speed.center[dat$degree100 == i] * vecPar[i]
     }
+    cat("The wind speed in ", strDatName " is centered.\n", sep = "")
     return(dat$speed.center)
 }
 ########################################################################################################################
