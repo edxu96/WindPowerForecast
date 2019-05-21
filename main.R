@@ -7,12 +7,18 @@ library(lubridate)
 ########################################################################################################################
 cat("################################################################################\n") ##############################
 cat("######## 0,  Control Parameters, Data and Functions ########\n")
-numFold <- 10  # [number of folds for cross validation]
-numIte <- 3  # [number of further iterations]
-wheFurIte <- FALSE  # [whether do further iterations]
-OutputSeries <- 1
-wheOuput <- FALSE
-wheVali <- FALSE
+## Control parameters
+numFold      <- 10     # [number of folds for cross validation]
+numIte       <- 3      # [number of further iterations]
+wheFurIte    <- FALSE  # [whether do further iterations]
+OutputSeries <- 1      # [series number of the output file]
+wheOuput     <- FALSE  # [whether to output the results]
+wheVali      <- FALSE  # [whether to validate the result]
+## Name of the data files
+# data for validation is the tail data in training data in next session
+strNameTrain <- "Data/TrainData3.csv"
+strNamePred  <- "Data/WeatherForecastInput4.csv"
+strNameVali  <- "Data/TrainData4.csv"
 source("Data.R")
 source("FuncCrossVali.R")
 source("FuncLocalReg.R")
