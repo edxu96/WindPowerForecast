@@ -17,7 +17,6 @@ crossValid <- function(dat, vecKernal, listVecKernalValue, numFold = 10){
     vecSquaredError <- rep(NA, numFold)
     for (i in 1:numFold) {
         datForTest <- dat[(dat$index == i),]
-        
         vecPowerPred <- predLocalReg(datForTest$speed.center, vecKernal, listVecKernalValue[[i]])
         vecSquaredError[i] <- sum((datForTest$power - vecPowerPred)^2, na.rm = TRUE)  # [squared (prediction) error]
     }

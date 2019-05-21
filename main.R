@@ -13,33 +13,33 @@ source("FuncLocalReg.R")
 source("FuncSeasonAdap.R")
 source("FuncWindDirec.R")
 source("FuncOutput.R")
-# cat("################################################################################\n") ##############################
-# cat("######## 1,  vecKernal and matWeight for Local Regression ########\n")
-# source("PrepareLocalReg.R")
-# cat("################################################################################\n") ##############################
-# cat("######## 2.1,  Calculate kernalSeason and matWeightSeason for every fold ########\n")
+cat("################################################################################\n") ##############################
+cat("######## 1,  vecKernal and matWeight for Local Regression ########\n")
+source("PrepareLocalReg.R")
+cat("################################################################################\n") ##############################
+cat("######## 2.1,  Calculate kernalSeason and matWeightSeason for every fold ########\n")
 numFold <- 10  # [number of folds for cross validation]
 datfTrain["index"] <- setIndexCrossVali(numTrain, numFold)  # Set index for datfTrain according to fold
-# vecKernalSeason <- rep(NA, numFold)  # Vector of kernals for adaptive seasonal local regression
-# listMatWeightSeason <- vector("list", numFold)
-# for (i in 1:numFold) {
-#     minSeriesVali <- min(datfTrain[(datfTrain$index == i),]$series)
-#     maxSeriesVali <- max(datfTrain[(datfTrain$index == i),]$series)
-#     vecKernalSeason[i] <- (minSeriesVali + maxSeriesVali) / 2
-#     listMatWeightSeason[[i]] <- calMatWeightSeasonGaussian(matWeight, datfTrain$series, vecKernalSeason[i])
-#     listMatWeightSeason[[i]][minSeriesVali:maxSeriesVali,] <- 0
-# }
-# cat("vecKernalSeason = [", paste(vecKernalSeason, collapse = ", "), "]\n", sep = "")
-# cat("--------------------------------------------------------------------------------\n")
-# cat("######## 2.2,  Calculate kernal value for every kernalSeason ########\n")
-# listVecKernalValue <- vector("list", numFold)
-# for(i in 1:numFold) {
-#     cat("---- Calculate kernal value for ", i, "-th kernalSeason ----\n")
-#     listVecKernalValue[[i]] <- calVecKernalValue(listMatWeightSeason[[i]], datfTrain)
-#     cat(i, "-th vecKernalValue = [", paste(listVecKernalValue[[i]], collapse = ", "), "]\n", sep = "")
-#     cat("--------------------------------------------------------------------------------\n")
-# }
-# outputListVecKernalValue(listVecKernalValue)
+vecKernalSeason <- rep(NA, numFold)  # Vector of kernals for adaptive seasonal local regression
+listMatWeightSeason <- vector("list", numFold)
+for (i in 1:numFold) {
+    minSeriesVali <- min(datfTrain[(datfTrain$index == i),]$series)
+    maxSeriesVali <- max(datfTrain[(datfTrain$index == i),]$series)
+    vecKernalSeason[i] <- (minSeriesVali + maxSeriesVali) / 2
+    listMatWeightSeason[[i]] <- calMatWeightSeasonGaussian(matWeight, datfTrain$series, vecKernalSeason[i])
+    listMatWeightSeason[[i]][minSeriesVali:maxSeriesVali,] <- 0
+}
+cat("vecKernalSeason = [", paste(vecKernalSeason, collapse = ", "), "]\n", sep = "")
+cat("--------------------------------------------------------------------------------\n")
+cat("######## 2.2,  Calculate kernal value for every kernalSeason ########\n")
+listVecKernalValue <- vector("list", numFold)
+for(i in 1:numFold) {
+    cat("---- Calculate kernal value for ", i, "-th kernalSeason ----\n")
+    listVecKernalValue[[i]] <- calVecKernalValue(listMatWeightSeason[[i]], datfTrain)
+    cat(i, "-th vecKernalValue = [", paste(listVecKernalValue[[i]], collapse = ", "), "]\n", sep = "")
+    cat("--------------------------------------------------------------------------------\n")
+}
+outputListVecKernalValue(listVecKernalValue)
 cat("################################################################################\n") ##############################
 cat("######## 3,  Cross Validation of SALR ########\n")
 cat("-------- 3.1,  First Iteration --------\n")

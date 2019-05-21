@@ -5,22 +5,22 @@
 ########################################################################################################################
 source("FuncData.R")
 ########################################################################################################################
-## 1,  Data for Training
-datfTrain <- frameDataTrain("Data/TrainData3.csv")
-numTrain <- length(datfTrain$series)
-datfTrain["speed.norm"] <- calNorminalSpeed(0.99, datfTrain) / 30
-datfTrain["speed.center"] <- datfTrain$speed.norm
-# datfTrain["speed.2"] <- datfTrain$speed.norm^2
-# datfTrain["speed.3"] <- datfTrain$speed.norm^3
-########################################################################################################################
-## 2,  Data for Validation
-datfVali <- tail(frameDataTrain("Data/TrainData4.csv"), 24 * 28)
-numVali <- length(datfVali$series)
-datfVali["speed.norm"] <- calNorminalSpeed(0.99, datfVali) / 30
-datfVali["speed.center"] <- datfVali$speed.norm
+# ## 1,  Data for Training
+# datfTrain <- frameDataTrain("Data/TrainData3.csv")
+# numTrain <- length(datfTrain$series)
+# datfTrain["speed.norm"] <- calNorminalSpeed(0.99, datfTrain) / 30
+# datfTrain["speed.center"] <- datfTrain$speed.norm
+# # datfTrain["speed.2"] <- datfTrain$speed.norm^2
+# # datfTrain["speed.3"] <- datfTrain$speed.norm^3
+# ########################################################################################################################
+# ## 2,  Data for Validation
+# datfVali <- tail(frameDataTrain("Data/TrainData4.csv"), 24 * 28)
+# numVali <- length(datfVali$series)
+# datfVali["speed.norm"] <- calNorminalSpeed(0.99, datfVali) / 30
+# datfVali["speed.center"] <- datfVali$speed.norm
 ########################################################################################################################
 ## 3,  Data for Prediction
-datfPred <- frameDataPred("Data/WeatherForecastInput3.csv")
+datfPred <- frameDataPred("Data/WeatherForecastInput4.csv")
 numPred <- length(datfPred$series)
 datfPred["speed.norm"] <- calNorminalSpeed(0.99, datfPred) / 30
 datfPred["speed.center"] <- datfPred$speed.norm

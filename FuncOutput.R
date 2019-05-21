@@ -22,3 +22,7 @@ outputMatOptimPar <- function(matOptimPar){
     write.table(matOptimPar, file = "Output/MatOptimPar_3.csv", sep = ",",  dec = ".", row.names = F,
                 col.names = F, quote = FALSE)
 }
+outputVecPred <- function(vecPred){
+    write.table(vecPred, file = "Output/VecPred_1.csv", sep = ",",  dec = ".", row.names = F,
+                col.names = F, quote = FALSE)
+}
