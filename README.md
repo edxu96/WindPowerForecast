@@ -3,6 +3,8 @@ Wind Power Prediction with ECMWF Data as Input using Statistical Learning.
 
 ## 1. Introduction
 
+Because of many non-linear factors, the modelling of wind power output of a wind farm and ECMWF data is difficult. Based on the relationship, we can predict the wind power output using ECMWF forecast of the future wind. Then, the prediction can be used in the trading in electricity market. With more and more penetration of wind power in electricity production, the modelling and prediction becomes more and more essential. Regression and tree-based statistical learning methods are used in this project, which are both powerful and easy to interpret.
+
 ## 2. Local Regression of Wind Speed
 
 The relationship between wind speed and wind power out is non-linear.
@@ -46,3 +48,16 @@ optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, dat = d
 ```
 
 ![Wind Rose Diagram of Wind Speed all around the Wind Farm](/Image/104.png)
+
+### 4.2 Concentrate the Wind Speed
+
+The wind speed in training data and prediction data can be concentrated to make more accurate prediction using the following function.
+
+```R
+updateWindSpeedCenter <- function(vecPar, dat){
+    for (i in 1:360) {
+        dat$speed.center[dat$degree100 == i] <- dat$speed.center[dat$degree100 == i] * vecPar[i]
+    }
+    return(dat$speed.center)
+}
+```
