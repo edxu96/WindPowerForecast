@@ -15,21 +15,21 @@ updateWindSpeedCenter <- function(vecPar, datf, numConCoef = 360){
 ########################################################################################################################
 validateCoefWindDirec <- function(coef, position, vecKernal, listVecKernalValue, numFold = numFold, datf = datfTrain){
     datf$speed.center[datf$degree100 == position] <- datf$speed.center[datf$degree100 == position] * coef
-    meanSquaredError <- crossValid(vecKernal, listVecKernalValue, datf, numFold)
-    return(meanSquaredError)
+    meanRootMeanSquaredError <- crossValid(vecKernal, listVecKernalValue, datf, numFold)
+    return(meanRootMeanSquaredError)
 }
-#' Function to calculate the vecOptimPar
+#' Function to calculate the vecCoef
 optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, numConCoef = 360, datf = datfTrain){
-    vecOptimPar <- rep(1.0, numConCoef)
-    vecOptimObj <- rep(NA, numConCoef)
+    vecCoef <- rep(1.0, numConCoef)
+    vecObj <- rep(NA, numConCoef)
     for (i in 1:numConCoef) {
         resultOptim <- optimize(validateCoefWindDirec, position = i, vecKernal = vecKernal,
             listVecKernalValue = listVecKernalValue, numFold = numFold, datf = datfTrain, lower = 0.6, upper = 1.1)
-        vecOptimPar[i] <- resultOptim$minimum
-        vecOptimObj[i] <- resultOptim$objective
-        cat(ite, "-th Iteration. at ", i, ", optimPar = ", vecOptimPar[i], ", optimObj = ",
-            vecOptimObj[i], "\n", sep = "")
+        vecCoef[i] <- resultOptim$minimum
+        vecObj[i] <- resultOptim$objective
+        cat(ite, "-th Iteration. at ", i, ", optimPar = ", vecCoef[i], ", optimObj = ",
+            vecObj[i], "\n", sep = "")
         # cat("--------------------------------------------------------------------------------\n")
     }
-    return(listResult = list(par = vecOptimPar, obj = vecOptimObj))
+    return(listResult = list(par = vecCoef, obj = vecObj))
 }

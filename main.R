@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # author: Edward J. Xu
 # date: May 22th, 2019
-# version: 3.2
+# version: 3.3
 # setwd("~/Documents/Github/WindPowerPrediction")
 ########################################################################################################################
 rm(list = ls())
@@ -10,8 +10,8 @@ library(lubridate)
 cat("#### 0,  Control Parameters, Data and Functions ################################\n") ##############################
 ## 0.1,  Control Parameters 1
 numFold      <- 10   # [number of folds for cross validation]
-numIte       <- 1    # [number of further iterations]
-outputSeries <- 6    # [series number of the output file]
+numIte       <- 1    # [number of further iterations] if = 1, there is no further iteration to optimize the coeffcients.
+outputSeries <- 7    # [series number of the output file]
 wheOutput    <- T    # [whether to output the results]
 wheVali      <- F    # [whether to validate the result]
 numConCoef   <- 360  # [number of concentration coefficients]
@@ -45,48 +45,49 @@ source("PreSeasonAdap.R")
 cat("################################################################################\n") ##############################
 cat("#### 3/6,  Cross Validation to Find Optimal Con-Coef for Wind Direction ########\n")
 cat("---- 3.1,  Benchmark without Con-Coef ------------------------------------------\n")
-mseBenchmark <- crossValid(vecKernal, listVecKernalValue, datfTrain, 10)
-cat("mseBenchmark =", mseBenchmark, "\n")
+mrmseBenchmark <- crossValid(vecKernal, listVecKernalValue, datfTrain, 10)
+cat("mrmseBenchmark =", mrmseBenchmark, "\n")
 cat("---- 3.2,  First Iteration -----------------------------------------------------\n")
 listResult <- optimWindDirection(1, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
-vecOptimPar <- listResult$par
-vecOptimObj <- listResult$obj
+vecCoef <- listResult$par
+vecObj <- listResult$obj
 rm(listResult)
 if (wheOutput) {
-    outputResult(vecOptimPar, outputSeries)
+    outputResult(vecCoef, outputSeries)
 }
-cat("aveImprove =", (sqrt(sum((vecOptimObj - mseBenchmark)^2)) / numConCoef / mseBenchmark), "\n")
-# cat("vecOptimPar = [", paste(vecOptimPar, collapse = ", "), "]\n", sep = "")  # It's too long to print
-# cat("vecOptimObj = [", paste(vecOptimObj, collapse = ", "), "]\n", sep = "")  # It's too long to print
+cat("aveImprove = ", (sqrt(sum((vecObj - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
+# The calculation of averaged improvement is the same as mse
+# cat("vecCoef = [", paste(vecCoef, collapse = ", "), "]\n", sep = "")  # It's too long to print
+# cat("vecObj = [", paste(vecObj, collapse = ", "), "]\n", sep = "")  # It's too long to print
 cat("--------------------------------------------------------------------------------\n") # ----------------------------
 # 3.2,  Further Iterations
 if (wheFurIte) {
     cat("---- 3.3,  Further Iterations --------------------------------------------------\n")
-    matOptimPar <- matrix(1, nrow = numIte, ncol = numConCoef)
-    matOptimObj <- matrix(1, nrow = numIte, ncol = numConCoef)
-    matOptimPar[1,] <- vecOptimPar
-    matOptimObj[1,] <- vecOptimObj
+    matCoef <- matrix(1, nrow = numIte, ncol = numConCoef)
+    matObj <- matrix(1, nrow = numIte, ncol = numConCoef)
+    matCoef[1,] <- vecCoef
+    matObj[1,] <- vecObj
     for (ite in 2:numIte) {
         cat("----", ite, "-th Iteration ---------------------------------------------------\n", sep = "")
         # The speed.center should be updated before every further iteration
-        datfTrain$speed.center <- updateWindSpeedCenter(matOptimPar[(ite - 1),], datfTrain, numConCoef)
-        datfPred$speed.center <- updateWindSpeedCenter(matOptimPar[(ite - 1),], datfPred, numConCoef)
+        datfTrain$speed.center <- updateWindSpeedCenter(matCoef[(ite - 1),], datfTrain, numConCoef)
+        datfPred$speed.center <- updateWindSpeedCenter(matCoef[(ite - 1),], datfPred, numConCoef)
         listResult <- optimWindDirection(ite, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
-        matOptimPar[ite, 1:length(listResult$par)] <- listResult$par
-        matOptimObj[ite, 1:length(listResult$obj)] <- listResult$obj
-        cat("aveImprove =", (sqrt(sum((matOptimObj[ite] - mseBenchmark)^2)) / numConCoef / mseBenchmark), "\n")
-        # cat("vecOptimPar = [", paste(matOptimPar[ite,], collapse = ", "), "]\n", sep = "")  # It's too long to print
+        matCoef[ite, 1:length(listResult$par)] <- listResult$par
+        matObj[ite, 1:length(listResult$obj)] <- listResult$obj
+        cat("aveImprove = ", (sqrt(sum((matObj[ite] - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
+        # cat("vecCoef = [", paste(matCoef[ite,], collapse = ", "), "]\n", sep = "")  # It's too long to print
         cat("--------------------------------------------------------------------------------\n")
     }; rm(listResult, ite)
     if (wheOutput) {
-        outputResult(matOptimPar, outputSeries)
+        outputResult(matCoef, outputSeries)
     }
-    ## 3.3,  Get vecOptimParProduct ----------------------------------------------------------------------------------------
+    ## 3.3,  Get vecCoefProduct ----------------------------------------------------------------------------------------
     # The final optimal coefficient for every degree are the product of every iteration.
-    vecOptimParProduct <- rep(1, numConCoef)
+    vecCoefProduct <- rep(1, numConCoef)
     for (i in 1:numIte) {
         for (j in 1:numConCoef) {
-            vecOptimParProduct[j] <- vecOptimParProduct[j] * matOptimPar[i, j]
+            vecCoefProduct[j] <- vecCoefProduct[j] * matCoef[i, j]
         }
     }
 }
@@ -94,11 +95,11 @@ cat("###########################################################################
 cat("#### 4/6,  SALR Model and Centered Wind Speed ##################################\n")
 ## 4.1,  Center the wind speed using optimal par from wind direction model
 if (wheFurIte) {
-    datfTrain$speed.center <- updateWindSpeedCenter(vecOptimParProduct, datfTrain, numConCoef)
-    datfPred$speed.center <- updateWindSpeedCenter(vecOptimParProduct, datfPred, numConCoef)
+    datfTrain$speed.center <- updateWindSpeedCenter(vecCoefProduct, datfTrain, numConCoef)
+    datfPred$speed.center <- updateWindSpeedCenter(vecCoefProduct, datfPred, numConCoef)
 } else {
-    datfTrain$speed.center <- updateWindSpeedCenter(vecOptimPar, datfTrain, numConCoef)
-    datfPred$speed.center <- updateWindSpeedCenter(vecOptimPar, datfPred, numConCoef)
+    datfTrain$speed.center <- updateWindSpeedCenter(vecCoef, datfTrain, numConCoef)
+    datfPred$speed.center <- updateWindSpeedCenter(vecCoef, datfPred, numConCoef)
 }
 ## 4.2,  Kernal for Adaptive Seasonal LR
 kernalSeasonPred <- numTrain + deltaKernalSeasonPred  # [kernal of seasonal adaptive local regression]
@@ -119,6 +120,6 @@ if (wheOutput) {
 }
 if (wheVali) {
     rmse <- calPredictionRMSE(vecPowerPred, datfVali$power)
-    cat("rootMeanSquaredError = ", rmse, "\n", sep = "")
+    cat("rootMeanSquaredError = ", rmse, "%\n", sep = "")
 }
 cat("#### Calculation End ###########################################################\n") ##############################

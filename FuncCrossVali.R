@@ -3,19 +3,22 @@
 # author: Edward J. Xu
 # date: May 22th, 2019
 ########################################################################################################################
+calPredictionRMSE <- function(vecPred, vecValid){
+    lengthNoNa <- sum(!is.na(vecPred), na.rm = T)  # Because we don't count the NA value in the following calculation,
+    # the length of the vecPred must minus the NA prediction. Usually, there is no NA in prediction.
+    rmse <- sqrt(sum((vecValid - vecPred)^2, na.rm = TRUE) / lengthNoNa) * 100  # % must be used
+    return(rmse)
+}
+
+########################################################################################################################
 ## 2,  Functions for cross-validation of seasonal adaptive local regression model
 crossValid <- function(vecKernal, listVecKernalValue, datf = datfTrain, numFold = 10){
-    vecSquaredError <- rep(NA, numFold)
+    vecRootMeanSquaredError <- rep(NA, numFold)
     for (i in 1:numFold) {
         datForTest <- datf[(datf$index == i),]
         vecPowerPred <- predLocalReg(datForTest$speed.center, vecKernal, listVecKernalValue[[i]])
-        vecSquaredError[i] <- sum((datForTest$power - vecPowerPred)^2, na.rm = TRUE)  # [squared (prediction) error]
+        vecRootMeanSquaredError[i] <- calPredictionRMSE(vecPowerPred, datForTest$power)
     }
-    meanSquaredError <- sum(vecSquaredError) / numFold  # [mean squared (prediction) error]
-    return(meanSquaredError)
-}
-########################################################################################################################
-calPredictionRMSE <- function(vecPred, vecValid){
-    rmse <- sqrt(sum((vecValid - vecPred)^2, na.rm = TRUE) / length(vecPred)) * 100
-    return(rmse)
+    meanRootMeanSquaredError <- sum(vecRootMeanSquaredError) / numFold  # [mean of mse]
+    return(meanRootMeanSquaredError)
 }
