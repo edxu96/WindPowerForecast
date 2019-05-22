@@ -46,7 +46,7 @@ cat("###########################################################################
 cat("#### 3/6,  Cross Validation to Find Optimal Con-Coef for Wind Direction ########\n")
 cat("---- 3.1,  Benchmark without Con-Coef ------------------------------------------\n")
 mrmseBenchmark <- crossValid(vecKernal, listVecKernalValue, datfTrain, 10)
-cat("mrmseBenchmark =", mrmseBenchmark, "\n")
+cat("armseBenchmark =", mrmseBenchmark, "\n")
 cat("---- 3.2,  First Iteration -----------------------------------------------------\n")
 listResult <- optimWindDirection(1, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
 vecCoef <- listResult$par
@@ -55,7 +55,7 @@ rm(listResult)
 if (wheOutput) {
     outputResult(vecCoef, outputSeries)
 }
-cat("aveImprove = ", (sqrt(sum((vecObj - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
+cat("aveARMSE = ", (sqrt(sum((vecObj - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
 # The calculation of averaged improvement is the same as mse
 # cat("vecCoef = [", paste(vecCoef, collapse = ", "), "]\n", sep = "")  # It's too long to print
 # cat("vecObj = [", paste(vecObj, collapse = ", "), "]\n", sep = "")  # It's too long to print
@@ -75,7 +75,7 @@ if (wheFurIte) {
         listResult <- optimWindDirection(ite, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
         matCoef[ite, 1:length(listResult$par)] <- listResult$par
         matObj[ite, 1:length(listResult$obj)] <- listResult$obj
-        cat("aveImprove = ", (sqrt(sum((matObj[ite] - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
+        cat("aveARMSE = ", (sqrt(sum((matObj[ite] - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")
         # cat("vecCoef = [", paste(matCoef[ite,], collapse = ", "), "]\n", sep = "")  # It's too long to print
         cat("--------------------------------------------------------------------------------\n")
     }; rm(listResult, ite)

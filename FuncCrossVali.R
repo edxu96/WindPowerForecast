@@ -9,7 +9,6 @@ calPredictionRMSE <- function(vecPred, vecValid){
     rmse <- sqrt(sum((vecValid - vecPred)^2, na.rm = TRUE) / lengthNoNa) * 100  # % must be used
     return(rmse)
 }
-
 ########################################################################################################################
 ## 2,  Functions for cross-validation of seasonal adaptive local regression model
 crossValid <- function(vecKernal, listVecKernalValue, datf = datfTrain, numFold = 10){
@@ -19,6 +18,6 @@ crossValid <- function(vecKernal, listVecKernalValue, datf = datfTrain, numFold 
         vecPowerPred <- predLocalReg(datForTest$speed.center, vecKernal, listVecKernalValue[[i]])
         vecRootMeanSquaredError[i] <- calPredictionRMSE(vecPowerPred, datForTest$power)
     }
-    meanRootMeanSquaredError <- sum(vecRootMeanSquaredError) / numFold  # [mean of mse]
-    return(meanRootMeanSquaredError)
+    aveRootMeanSquaredError <- sum(vecRootMeanSquaredError) / numFold  # [mean of mse]
+    return(aveRootMeanSquaredError)
 }
