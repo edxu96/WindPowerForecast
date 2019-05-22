@@ -11,13 +11,13 @@ outputResult <- function(result, outputSeries = 1){
 }
 #' To convert a list of vectors in same length to a matrix, and then output
 outputlistVec <- function(listVec, outputSeries = 1){
-    strName <- 
-    get()
     numList <- length(listVec)
     num <- length(listVec[[1]])
     mat <- matrix(NA, ncol = numList, nrow = num)
     for (i in 1:numList) {
         mat[,i] <- listVec[[i]]
     }
-    outputResult(mat, outputSeries)
+    strFileName <- paste("Output/", deparse(substitute(listVec)), "_", outputSeries, ".csv", sep = "")
+    write.table(mat, file = strFileName, sep = ",",  dec = ".", row.names = F,
+                col.names = F, quote = FALSE)
 }
