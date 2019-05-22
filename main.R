@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # author: Edward J. Xu
 # date: May 22th, 2019
-# version: 3.3
+# version: 3.4
 # setwd("~/Documents/Github/WindPowerPrediction")
 ########################################################################################################################
 rm(list = ls())
@@ -13,7 +13,7 @@ numFold      <- 10   # [number of folds for cross validation]
 numIte       <- 1    # [number of further iterations] if = 1, there is no further iteration to optimize the coeffcients.
 outputSeries <- 8    # [series number of the output file]
 wheOutput    <- T    # [whether to output the results]
-wheVali      <- F    # [whether to validate the result]
+wheVali      <- T    # [whether to validate the result]
 numConCoef   <- 360  # [number of concentration coefficients]
 if (numIte > 1) {
     wheFurIte <- T
@@ -21,8 +21,8 @@ if (numIte > 1) {
     wheFurIte <- F    # [whether do further iterations]
 }
 ## 0.2, Name of the data files
-strNameTrain <- "Data/TrainData4.csv"
-strNamePred  <- "Data/WeatherForecastInput4.csv"
+strNameTrain <- "Data/TrainData3.csv"
+strNamePred  <- "Data/WeatherForecastInput3.csv"
 strNameVali  <- "Data/TrainData4.csv"  # Data for validation is the tail data in training data in next session
 source("Data.R")  # All functions needed for Data.R is in FuncData.R
 ## 0.3, Function Files
@@ -48,7 +48,7 @@ cat("---- 3.1,  Benchmark without Con-Coef -------------------------------------
 mrmseBenchmark <- crossValid(vecKernal, listVecKernalValue, datfTrain, 10)
 cat("armseBenchmark =", mrmseBenchmark, "\n")
 cat("---- 3.2,  First Iteration -----------------------------------------------------\n")
-listResult <- optimWindDirection(1, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
+listResult <- optimWindDirection(listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
 vecCoef <- listResult$par
 vecObj <- listResult$obj
 rm(listResult)
@@ -72,7 +72,7 @@ if (wheFurIte) {
         # The speed.center should be updated before every further iteration
         datfTrain$speed.center <- updateWindSpeedCenter(matCoef[(ite - 1),], datfTrain, numConCoef)
         datfPred$speed.center <- updateWindSpeedCenter(matCoef[(ite - 1),], datfPred, numConCoef)
-        listResult <- optimWindDirection(ite, listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
+        listResult <- optimWindDirection(listVecKernalValue, vecKernalSeason, numConCoef, datfTrain)
         matCoef[ite, 1:length(listResult$par)] <- listResult$par
         matObj[ite, 1:length(listResult$obj)] <- listResult$obj
         cat("aveARMSE = ", (sqrt(sum((matObj[ite] - mrmseBenchmark)^2)) / numConCoef * 100), "%\n", sep = "")

@@ -19,16 +19,22 @@ validateCoefWindDirec <- function(coef, position, vecKernal, listVecKernalValue,
     return(meanRootMeanSquaredError)
 }
 #' Function to calculate the vecCoef
-optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, numConCoef = 360, datf = datfTrain){
+optimWindDirection <- function(listVecKernalValue, vecKernalSeason, numConCoef = 360, datf = datfTrain){
     vecCoef <- rep(1.0, numConCoef)
     vecObj <- rep(NA, numConCoef)
+    lenInterval <- 360 / numConCoef
     for (i in 1:numConCoef) {
         resultOptim <- optimize(validateCoefWindDirec, position = i, vecKernal = vecKernal,
             listVecKernalValue = listVecKernalValue, numFold = numFold, datf = datfTrain, lower = 0.6, upper = 1.1)
         vecCoef[i] <- resultOptim$minimum
         vecObj[i] <- resultOptim$objective
-        cat(ite, "-th Iteration. at ", i, ", optimPar = ", vecCoef[i], ", optimObj = ",
-            vecObj[i], "\n", sep = "")
+        if (i != 360) {
+            cat("[", (i - lenInterval/2), ", ", (i + lenInterval/2), "), coef = ", vecCoef[i], ", obj = ", vecObj[i],
+                "\n", sep = "")
+        } else {  # If i = 360, the half interval after i is 0 +
+            cat("[", (360 - lenInterval/2), ", ", (0 + lenInterval/2), "), coef = ", vecCoef[i], ", obj = ", vecObj[i],
+                "\n", sep = "")
+        }
         # cat("--------------------------------------------------------------------------------\n")
     }
     return(listResult = list(par = vecCoef, obj = vecObj))
