@@ -11,7 +11,8 @@ for (i in 1:numFold) {
     maxSeriesVali <- max(datfTrain[(datfTrain$index == i),]$series)  # [end of the validation period]
     vecKernalSeason[i] <- (minSeriesVali + maxSeriesVali) / 2  # Set the center time of validation period as the kernal
     listMatWeightSeason[[i]] <- calMatWeightSeasonGaussian(matWeight, datfTrain$series, vecKernalSeason[i])
-    listMatWeightSeason[[i]][minSeriesVali:maxSeriesVali,] <- 0
+    listMatWeightSeason[[i]][minSeriesVali:maxSeriesVali,] <- 0  # Set the weight for the data in validation period to
+    # 0, the effect of those data cann't be considered in the cross-validation.
 }
 cat("vecKernalSeason = [", paste(vecKernalSeason, collapse = ", "), "]\n", sep = "")
 cat("--------------------------------------------------------------------------------\n")

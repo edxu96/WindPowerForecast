@@ -11,7 +11,7 @@ cat("#### 0,  Control Parameters, Data and Functions ###########################
 ## 0.1,  Control Parameters 1
 numFold      <- 10   # [number of folds for cross validation]
 numIte       <- 1    # [number of further iterations] if = 1, there is no further iteration to optimize the coeffcients.
-outputSeries <- 7    # [series number of the output file]
+outputSeries <- 8    # [series number of the output file]
 wheOutput    <- T    # [whether to output the results]
 wheVali      <- F    # [whether to validate the result]
 numConCoef   <- 360  # [number of concentration coefficients]
