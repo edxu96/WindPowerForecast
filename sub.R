@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Test the adaptive seasonal local regression model
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 rm(list = ls())
 library(lubridate)
@@ -17,8 +17,8 @@ cat("###########################################################################
 cat("######## 2,  Center the Data according to Wind Direction ########\n")
 vecOptimPar <- rep(1.0, 360)
 vecOptimPar[1:359] <- read.csv("Data/VecOptimPar_1.csv")[,1]
-datfTrain$speed.center <- updateWindSpeedCenter(vecOptimPar, datfTrain)
-datfPred$speed.center <- updateWindSpeedCenter(vecOptimPar, datfPred)
+datfTrain$speed.center <- updateWindSpeedCenter(vecOptimPar, datfTrain, numConCoef)
+datfPred$speed.center <- updateWindSpeedCenter(vecOptimPar, datfPred, numConCoef)
 cat("The wind speed is centered.\n")
 cat("################################################################################\n") ##############################
 cat("######## 3,  kernalSeason and vecKernalValue for Adaptive Seasonal LR ########\n")

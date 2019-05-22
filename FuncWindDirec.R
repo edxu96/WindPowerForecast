@@ -1,28 +1,28 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Functions for Coef of Wind Direction
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 ########################################################################################################################
-updateWindSpeedCenter <- function(vecPar, dat, strDatName){
-    for (i in 1:360) {
-        dat$speed.center[dat$degree100 == i] <- dat$speed.center[dat$degree100 == i] * vecPar[i]
+updateWindSpeedCenter <- function(vecPar, datf, numConCoef = 360){
+    for (i in 1:numConCoef) {
+        datf$speed.center[datf$degree100 == i] <- datf$speed.center[datf$degree100 == i] * vecPar[i]
     }
-    cat("The wind speed in ", strDatName " is centered.\n", sep = "")
-    return(dat$speed.center)
+    cat("The wind speed in ", deparse(substitute(datf)), " is centered.\n", sep = "")
+    return(datf$speed.center)
 }
 ########################################################################################################################
-validateCoefWindDirec <- function(coef, position, vecKernal, listVecKernalValue, numFold = numFold, dat = datfTrain){
-    dat$speed.center[dat$degree100 == position] <- dat$speed.center[dat$degree100 == position] * coef
-    meanSquaredError <- crossValid(dat, vecKernal, listVecKernalValue, numFold)
+validateCoefWindDirec <- function(coef, position, vecKernal, listVecKernalValue, numFold = numFold, datf = datfTrain){
+    datf$speed.center[datf$degree100 == position] <- datf$speed.center[datf$degree100 == position] * coef
+    meanSquaredError <- crossValid(vecKernal, listVecKernalValue, datf, numFold)
     return(meanSquaredError)
 }
 #' Function to calculate the vecOptimPar
-optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, dat = datfTrain){
-    vecOptimPar <- rep(1.0, 360)
-    vecOptimObj <- rep(NA, 360)
-    for (i in 1:360) {
+optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, numConCoef = 360, datf = datfTrain){
+    vecOptimPar <- rep(1.0, numConCoef)
+    vecOptimObj <- rep(NA, numConCoef)
+    for (i in 1:numConCoef) {
         resultOptim <- optimize(validateCoefWindDirec, position = i, vecKernal = vecKernal,
-            listVecKernalValue = listVecKernalValue, numFold = numFold, dat = datfTrain, lower = 0.6, upper = 1.1)
+            listVecKernalValue = listVecKernalValue, numFold = numFold, datf = datfTrain, lower = 0.6, upper = 1.1)
         vecOptimPar[i] <- resultOptim$minimum
         vecOptimObj[i] <- resultOptim$objective
         cat(ite, "-th Iteration. at ", i, ", optimPar = ", vecOptimPar[i], ", optimObj = ",

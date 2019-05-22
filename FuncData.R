@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Functions for Data
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 ########################################################################################################################
 frameDataTrain <- function(strData){
     # dat <- read.csv("Data/TrainData3.csv", header = T)
@@ -20,11 +20,11 @@ frameDataTrain <- function(strData){
     vecDegree <- round(vecAngle100)
     vecDegree[vecDegree == 0] <- 360
     # Frame data
-    dat.f <- data.frame("series" = seq(1, numTrain), "time" = vecTimeStamp,
+    datf <- data.frame("series" = seq(1, numTrain), "time" = vecTimeStamp,
                         "power" = dat[, 2], "u10" = dat[, 3], "v10" = dat[, 4],
                         "u100" = dat[, 5], "v100" = dat[, 6], "cos10" = vecCos10,
                         "cos100" = vecCos100, "angle100" = vecAngle100, "degree100" = vecDegree)
-    return(dat.f)
+    return(datf)
 }
 frameDataPred <- function(strData){
     dat <- read.csv(strData, header = T)
@@ -40,13 +40,22 @@ frameDataPred <- function(strData){
     vecDegree <- round(vecAngle100)
     vecDegree[vecDegree == 0] <- 360
     # Frame data
-    dat.f <- data.frame("series" = seq(1, numPred), "time" = vecTimeStamp, "u10" = dat[, 2],
+    datf <- data.frame("series" = seq(1, numPred), "time" = vecTimeStamp, "u10" = dat[, 2],
                         "v10" = dat[, 3], "u100" = dat[, 4], "v100" = dat[, 5],
                         "cos10" = vecCos10, "cos100" = vecCos100, "angle100" = vecAngle100,
                         "degree100" = vecDegree)
-    return(dat.f)
+    return(datf)
 }
-calNorminalSpeed <- function(alpha, dat.f){
-    vec_speed <- (1 - alpha) * sqrt(dat.f$u10^2 + dat.f$v10^2) + alpha * sqrt(dat.f$u100^2 + dat.f$v100^2)
+calNorminalSpeed <- function(alpha, datf){
+    vec_speed <- (1 - alpha) * sqrt(datf$u10^2 + datf$v10^2) + alpha * sqrt(datf$u100^2 + datf$v100^2)
     return(vec_speed)
+}
+setIndexCrossVali <- function(num, numFold){
+    # Index in 10 fold for cross validation
+    numPerFold <- round(num / numFold)
+    vecIndex <- rep(numFold, num)
+    for (i in 1:(numFold - 1)) {
+        vecIndex[(numPerFold * (i - 1) + 1):(numPerFold * i)] <- rep(i, numPerFold)
+    }
+    return(vecIndex)
 }

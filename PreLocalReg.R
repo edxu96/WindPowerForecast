@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
-# Calculate vecKernal and matWeight for Local Regression
+# 1/6,  vecKernal and matWeight for Local Regression
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 ## 1.1,  Kernal of local regression
 vecKernal <- rep(NA, 25)
 vecKernal[1:21] <- seq(0, 0.7, by = 0.7 / 20)

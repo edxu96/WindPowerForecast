@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Functions for Adaptive Seasonal Model
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 # setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 ########################################################################################################################
 calVecWeightSeasonGaussian <- function(vecSeries, kernalSeason, numTrain){

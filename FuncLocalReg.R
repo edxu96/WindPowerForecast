@@ -1,7 +1,7 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Functions for Local Regression
 # author: Edward J. Xu
-# date: May 20th, 2019
+# date: May 22th, 2019
 # setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 ########################################################################################################################
 ## 1,  Functions to generate vector of kernals
@@ -33,17 +33,17 @@ calKernalValue <- function(vecWeightKernal, kernal, numTrainClean, vecX = vecXCl
     kernalValue <- (t(vecBeta) %*% vecColXKernal)[1]
     return(kernalValue)
 }
-calVecKernalValue <- function(matWeight = matWeight, dat = datfTrain){
+calVecKernalValue <- function(matWeight = matWeight, datf = datfTrain){
     numKernal <- length(matWeight[1,])
     ## Remove the NA data
-    vecXClean <- removeNaData(dat$speed.center, dat$power, dat$speed.center)
-    vecYClean <- removeNaData(dat$power, dat$power, dat$speed.center)
+    vecXClean <- removeNaData(datf$speed.center, datf$power, datf$speed.center)
+    vecYClean <- removeNaData(datf$power, datf$power, datf$speed.center)
     numTrainClean <- length(vecXClean)
     ## Being calculation
     vecKernalValue <- rep(NA, numKernal)
     for (i in 1:numKernal) {
         # cat("--------------------------------------------------------------------------------")
-        vecWeightClean <- removeNaData(matWeight[,i], dat$power, dat$speed.center)
+        vecWeightClean <- removeNaData(matWeight[,i], datf$power, datf$speed.center)
         # cat("Whether matWeightKernalDiag all non-NA? ", all(!is.na(matWeightKernalDiag)), "\n", sep = "")
         # cat("Whether matX all non-NA? ", all(!is.na(matX)), "\n", sep = "")
         # cat("Whether vecColY all non-NA? ", all(!is.na(vecColY)), "\n", sep = "")
@@ -55,6 +55,8 @@ calVecKernalValue <- function(matWeight = matWeight, dat = datfTrain){
 ########################################################################################################################
 ## 1,  Functions to predict using local regression
 predLocalReg <- function(vecX, vecKernal, vecKernalValue){
+    # cat("Whether all vecX are non-NA?", all(!is.na(vecX)), "\n")
+    # cat("Whether all vecX are NULL?", is.null(vecX)), "\n")
     numPred <- length(vecX)
     vecPred <- rep(NA, numPred)
     for (i in 1:numPred) {

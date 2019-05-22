@@ -1,11 +1,11 @@
 # DTU31761A3: Wind Power Output Prediction using Regression
 # Functions to ouput the result
 # author: Edward J. Xu
-# date: May 21th, 2019
+# date: May 22th, 2019
 ########################################################################################################################
 #' To output the result in a csv with a specific name
 outputResult <- function(result, outputSeries = 1){
-    strFileName <- paste("Output/", deparse(substitute(test)), "_", outputSeries, ".csv", sep = "")
+    strFileName <- paste("Output/", deparse(substitute(result)), "_", outputSeries, ".csv", sep = "")
     write.table(result, file = strFileName, sep = ",",  dec = ".", row.names = F,
                 col.names = F, quote = FALSE)
 }

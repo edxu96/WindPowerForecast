@@ -1,26 +1,10 @@
 # WindPowerPrediction
-Wind Power Prediction with ECMWF Data as Input using Statistical Learning.
+
+Wind Power Prediction using Statistical Learning with ECMWF Data as Input.
 
 ## 1. Introduction
 
 Because of many non-linear factors, the modelling of wind power output of a wind farm and ECMWF data is difficult. Based on the relationship, we can predict the wind power output using ECMWF forecast of the future wind. Then, the prediction can be used in the trading in electricity market. With more and more penetration of wind power in electricity production, the modelling and prediction becomes more and more essential. Regression and tree-based statistical learning methods are used in this project, which are both powerful and easy to interpret.
-
-There are some control parameters in the `main.R` file:
-
-```R
-## Control parameters
-numFold      <- 10     # [number of folds for cross validation]
-numIte       <- 3      # [number of further iterations]
-wheFurIte    <- FALSE  # [whether do further iterations]
-OutputSeries <- 1      # [series number of the output file]
-wheOuput     <- FALSE  # [whether to output the results]
-wheVali      <- FALSE  # [whether to validate the result]
-## Name of the data files
-# data for validation is the tail data in training data in next session
-strNameTrain <- "Data/TrainData3.csv"
-strNamePred  <- "Data/WeatherForecastInput4.csv"
-strNameVali  <- "Data/TrainData4.csv"  
-```
 
 If there are ready-made data in `Output` folder, the file `sub.R` can be used to predict directly.
 

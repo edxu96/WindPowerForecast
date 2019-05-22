@@ -8,6 +8,7 @@ source("FuncData.R")
 ## 1,  Data for Training
 datfTrain <- frameDataTrain(strNameTrain)
 numTrain <- length(datfTrain$series)
+datfTrain["index"] <- setIndexCrossVali(numTrain, numFold)  # Set index for datfTrain according to fold
 datfTrain["speed.norm"] <- calNorminalSpeed(0.99, datfTrain) / 30
 datfTrain["speed.center"] <- datfTrain$speed.norm
 # datfTrain["speed.2"] <- datfTrain$speed.norm^2
