@@ -51,6 +51,19 @@ calVecKernalValue <- function(matWeight = matWeight, datf = datfTrain){
     return(vecKernalValue)
 }
 ########################################################################################################################
+# Get the local regression model for every fold in cross-validation
+calListVecKernalValue <- function(listMatWeightSeason, datf){
+    numFold <- length(listMatWeightSeason)
+    listVecKernalValue <- vector("list", numFold)
+    for(i in 1:numFold) {
+        cat("---- Calculate kernal value for ", i, "-th kernalSeason -----------------------------\n", sep = "")
+        listVecKernalValue[[i]] <- calVecKernalValue(listMatWeightSeason[[i]], datf)
+        cat(i, "-th vecKernalValue = [", paste(listVecKernalValue[[i]], collapse = ", "), "]\n", sep = "")
+        cat("--------------------------------------------------------------------------------\n")
+    }
+    return(listVecKernalValue)
+}
+########################################################################################################################
 ## 1,  Functions to predict using local regression
 predLocalReg <- function(vecX, vecKernal, vecKernalValue){
     # cat("Whether all vecX are non-NA?", all(!is.na(vecX)), "\n")

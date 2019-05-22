@@ -23,14 +23,15 @@ optimWindDirection <- function(listVecKernalValue, vecKernalSeason, numConCoef =
     vecCoef <- rep(1.0, numConCoef)
     vecObj <- rep(NA, numConCoef)
     lenInterval <- 360 / numConCoef
+    invLenInterval <- 1 / lenInterval
     for (i in 1:numConCoef) {
         resultOptim <- optimize(validateCoefWindDirec, position = i, vecKernal = vecKernal,
             listVecKernalValue = listVecKernalValue, numFold = numFold, datf = datfTrain, lower = 0.6, upper = 1.1)
         vecCoef[i] <- resultOptim$minimum
         vecObj[i] <- resultOptim$objective
-        if (i != 360) {
-            cat("[", (i - lenInterval/2), ", ", (i + lenInterval/2), "), coef = ", vecCoef[i], ", obj = ", vecObj[i],
-                "\n", sep = "")
+        if (i != numConCoef) {
+            cat("[", (i / invLenInterval - lenInterval/2), ", ", (i / invLenInterval + lenInterval/2), "), coef = ",
+                vecCoef[i], ", obj = ", vecObj[i], "\n", sep = "")
         } else {  # If i = 360, the half interval after i is 0 +
             cat("[", (360 - lenInterval/2), ", ", (0 + lenInterval/2), "), coef = ", vecCoef[i], ", obj = ", vecObj[i],
                 "\n", sep = "")

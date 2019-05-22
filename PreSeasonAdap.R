@@ -18,13 +18,7 @@ cat("vecKernalSeason = [", paste(vecKernalSeason, collapse = ", "), "]\n", sep =
 cat("--------------------------------------------------------------------------------\n")
 cat("#### 2.2/6,  Calculate kernal value for every kernalSeason #####################\n")
 # Get the local regression model for every fold in cross-validation
-listVecKernalValue <- vector("list", numFold)
-for(i in 1:numFold) {
-    cat("---- Calculate kernal value for ", i, "-th kernalSeason -----------------------------\n", sep = "")
-    listVecKernalValue[[i]] <- calVecKernalValue(listMatWeightSeason[[i]], datfTrain)
-    cat(i, "-th vecKernalValue = [", paste(listVecKernalValue[[i]], collapse = ", "), "]\n", sep = "")
-    cat("--------------------------------------------------------------------------------\n")
-}
+listVecKernalValue <- calListVecKernalValue(listMatWeightSeason, datfTrain)
 if (wheOutput) {
     outputlistVec(listVecKernalValue, outputSeries)
 }
