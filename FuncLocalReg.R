@@ -2,7 +2,6 @@
 # Functions for Local Regression
 # author: Edward J. Xu
 # date: May 22th, 2019
-# setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 ########################################################################################################################
 ## 1,  Functions to generate vector of kernals
 calVecWeightLocalGaussian <- function(sigma, vecX, kernal, numTrain){
@@ -26,7 +25,7 @@ calKernalValue <- function(vecWeightKernal, kernal, numTrainClean, vecX = vecXCl
     vecColY[,1] <- vecY
     vecBeta <- matrix(NA, nrow = 2, ncol = 1)
     vecBeta <- solve(t(matX) %*% matWeightKernalDiag %*% matX) %*% t(matX) %*% matWeightKernalDiag %*% vecColY
-    cat("vecBeta = [", paste(vecBeta, collapse = ", "), "]\n", sep = "")
+    cat("kernal = ", kernal, " ; vecBeta = [", paste(vecBeta, collapse = ", "), "]\n", sep = "")
     ## Calculate value for the kernal
     vecColXKernal <- matrix(1, nrow = 2, ncol = 1)
     vecColXKernal[2, 1] <- kernal
@@ -47,7 +46,6 @@ calVecKernalValue <- function(matWeight = matWeight, datf = datfTrain){
         # cat("Whether matWeightKernalDiag all non-NA? ", all(!is.na(matWeightKernalDiag)), "\n", sep = "")
         # cat("Whether matX all non-NA? ", all(!is.na(matX)), "\n", sep = "")
         # cat("Whether vecColY all non-NA? ", all(!is.na(vecColY)), "\n", sep = "")
-        cat(i, "-th kernal = ", vecKernal[i], "\n", sep = "")
         vecKernalValue[i] <- calKernalValue(vecWeightClean, vecKernal[i], numTrainClean, vecXClean, vecYClean)
     }
     return(vecKernalValue)

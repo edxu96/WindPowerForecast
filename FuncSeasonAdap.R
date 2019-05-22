@@ -2,7 +2,6 @@
 # Functions for Adaptive Seasonal Model
 # author: Edward J. Xu
 # date: May 22th, 2019
-# setwd("~/Desktop/WindPowerForecast_DTU31761A3_EDXU")
 ########################################################################################################################
 calVecWeightSeasonGaussian <- function(vecSeries, kernalSeason, numTrain){
     vecWeightSeason <- rep(NA, numTrain)
