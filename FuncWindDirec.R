@@ -20,6 +20,7 @@ validateCoefWindDirec <- function(coef, position, vecKernal, listVecKernalValue,
 }
 #' Function to calculate the vecCoef
 optimWindDirection <- function(listVecKernalValue, vecKernalSeason, numConCoef = 360, datf = datfTrain){
+    # cat(listVecKernalValue[[1]])
     vecCoef <- rep(1.0, numConCoef)
     vecObj <- rep(NA, numConCoef)
     lenInterval <- 360 / numConCoef

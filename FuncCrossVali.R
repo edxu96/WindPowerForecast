@@ -15,7 +15,7 @@ crossValid <- function(vecKernal, listVecKernalValue, datf = datfTrain, numFold 
     vecRootMeanSquaredError <- rep(NA, numFold)
     for (i in 1:numFold) {
         datForVali <- datf[(datf$index == i),]
-        vecPowerPred <- predLocalReg(datForVali$speed.center, vecKernal, listVecKernalValue[[i]])
+        vecPowerPred <- predLinearInter(datForVali$speed.center, vecKernal, listVecKernalValue[[i]])
         vecRootMeanSquaredError[i] <- calPredictionRMSE(vecPowerPred, datForVali$power)
     }
     aveRootMeanSquaredError <- sum(vecRootMeanSquaredError) / numFold  # [mean of mse]

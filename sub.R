@@ -33,11 +33,11 @@ cat("---------------------------------------------------------------------------
 cat("vecKernalValue = [", paste(vecKernalValue, collapse = ", "), "]\n", sep = "")
 cat("################################################################################\n") ##############################
 cat("######## 4,  Prediction ########\n")
-vecPredBenchMark <- predLocalReg(datfPred$speed.norm, vecKernal, vecKernalValue)
+vecPredBenchMark <- predLinearInter(datfPred$speed.norm, vecKernal, vecKernalValue)
 rmseBenchMark <- calPredictionRMSE(vecPredBenchMark, datfVali$power)
 cat("rmseBenchMark = ", rmseBenchMark, "\n", sep = "")
 ##
-vecPred <- predLocalReg(datfPred$speed.center, vecKernal, vecKernalValue)
+vecPred <- predLinearInter(datfPred$speed.center, vecKernal, vecKernalValue)
 # rmse <- calPredictionRMSE(vecPred, datfVali$power)
 # cat("rmse = ", rmse, "\n", sep = "")
 outputResult(vecPred, OutputSeries)

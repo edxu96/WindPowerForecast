@@ -65,24 +65,29 @@ calListVecKernalValue <- function(listMatWeightSeason, datf){
 }
 ########################################################################################################################
 ## 1,  Functions to predict using local regression
-predLocalReg <- function(vecX, vecKernal, vecKernalValue){
-    # cat("Whether all vecX are non-NA?", all(!is.na(vecX)), "\n")
-    # cat("Whether all vecX are NULL?", is.null(vecX)), "\n")
-    numPred <- length(vecX)
-    vecPred <- rep(NA, numPred)
-    for (i in 1:numPred) {
-        x <- vecX[i]
-        j <- 1
-        while (!((vecKernal[j] <= x) & (vecKernal[(j + 1)] > x))) {
-            j <- j + 1
+predLinearInter <- function(vecX, vecKernal, vecKernalValue){
+    if (is.null(vecX)){
+        cat("Error: vecX is NULL. \n")
+    } else {
+        numPred <- length(vecX)
+        vecPred <- rep(NA, numPred)
+        for (i in 1:numPred) {
+            x <- vecX[i]
+            if (x > tail(vecKernal, 1)) {
+                cat(i, "-th data point is outside the local regression line")
+                vecPred[i] <- 1
+            } else {
+                j <- 1
+                while (!((vecKernal[j] <= x) & (vecKernal[(j + 1)] > x))) {
+                    j <- j + 1
+                }
+                x1 <- vecKernal[j]
+                x2 <- vecKernal[(j + 1)]
+                y1 <- vecKernalValue[j]
+                y2 <- vecKernalValue[(j + 1)]
+                vecPred[i] <- y1 + (x - x1) * (y2 - y1) / (x2 - x1)  # Linear interpolation
+            }
         }
-        x1 <- vecKernal[j]
-        x2 <- vecKernal[(j + 1)]
-        # print(x1)
-        # print(x2)
-        y1 <- vecKernalValue[j]
-        y2 <- vecKernalValue[(j + 1)]
-        vecPred[i] <- y1 + (x - x1) * (y2 - y1) / (x2 - x1)
     }
     return(vecPred)
 }
