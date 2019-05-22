@@ -11,9 +11,11 @@ outputResult <- function(result, outputSeries = 1){
 }
 #' To convert a list of vectors in same length to a matrix, and then output
 outputlistVec <- function(listVec, outputSeries = 1){
+    strName <- 
+    get()
     numList <- length(listVec)
     num <- length(listVec[[1]])
-    mat <- matrix(NA, col = numList, nrow = num)
+    mat <- matrix(NA, ncol = numList, nrow = num)
     for (i in 1:numList) {
         mat[,i] <- listVec[[i]]
     }

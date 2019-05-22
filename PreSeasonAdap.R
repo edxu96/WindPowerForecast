@@ -25,5 +25,5 @@ for(i in 1:numFold) {
     cat("--------------------------------------------------------------------------------\n")
 }
 if (wheOutput) {
-    outputlistVec(listVecKernalValue, OutputSeries)
+    outputlistVec(listVecKernalValue, outputSeries)
 }

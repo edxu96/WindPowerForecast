@@ -7,7 +7,9 @@ updateWindSpeedCenter <- function(vecPar, datf, numConCoef = 360){
     for (i in 1:numConCoef) {
         datf$speed.center[datf$degree100 == i] <- datf$speed.center[datf$degree100 == i] * vecPar[i]
     }
-    cat("The wind speed in ", deparse(substitute(datf)), " is centered.\n", sep = "")
+    # strNameDatf = deparse(substitute(datf))
+    # cat("The wind speed in ", strNameDatf, " is centered.\n", sep = "")  # It always prints all the contents
+    cat("The wind speed is centered.\n", sep = "")
     return(datf$speed.center)
 }
 ########################################################################################################################
