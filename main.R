@@ -10,7 +10,7 @@ library(lubridate)
 cat("#### 0,  Control Parameters, Data and Functions ################################\n") ##############################
 ## 0.1,  Control Parameters 1
 numFold      <- 10   # [number of folds for cross validation]
-outputSeries <- 10   # [series number of the output file]
+outputSeries <- 11   # [series number of the output file]
 wheOutput    <- T    # [whether to output the results]
 wheVali      <- T    # [whether to validate the result]
 numConCoef   <- 360  # [number of concentration coefficients]
