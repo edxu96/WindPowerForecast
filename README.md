@@ -12,7 +12,7 @@ If there are ready-made data in `Output` folder, the file `sub.R` can be used to
 
 The relationship between wind speed and wind power out is non-linear.
 
-![Local Regression of Wind Speed and Power Output](/Image/103.png)
+![Local Regression of Wind Speed and Power Output](./src/Image/103.png)
 
 The spans between data points with nominal wind speed lower than 0.7 are shorter than those greater than 0.7. Short spans can model more sensitive relationship, while longer spans are more robust to bad-behaved data.
 
@@ -22,11 +22,11 @@ The relationship is changing. It may change gradually or seasonally. Different k
 
 The easiest weight function is to use the sliding window. The observations outside the time window are not accounted.
 
-![Adaptive Local Regression with Sliding Window of Wind Speed and Power Output](/Image/102.png)
+![Adaptive Local Regression with Sliding Window of Wind Speed and Power Output](./src/Image/102.png)
 
 The seasonal effect on the relationship can also be very significant.
 
-![Seasonal Adaptive Local Regression of Wind Speed and Power Output](/Image/101.png)
+![Seasonal Adaptive Local Regression of Wind Speed and Power Output](./src/Image/101.png)
 
 ## 4. Tree-Based Concentration Coefficient of Wind Direction
 
@@ -50,7 +50,7 @@ optimWindDirection <- function(ite, listVecKernalValue, vecKernalSeason, dat = d
 }
 ```
 
-![Wind Rose Diagram of Wind Speed all around the Wind Farm](/Image/104.png)
+![Wind Rose Diagram of Wind Speed all around the Wind Farm](./src/Image/104.png)
 
 ### 4.2 Concentrate the Wind Speed
 
